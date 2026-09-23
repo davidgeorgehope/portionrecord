@@ -62,6 +62,11 @@ The first run asks for three things:
 - **Downloads folder**, the first time a recording is saved. If you deny it,
   the recording stays in a temporary folder and Finder shows you where.
 
+`build.sh` signs with `SIGN_IDENTITY`, or else your keychain's first
+code-signing identity, so these grants survive rebuilds. With no identity it
+signs ad-hoc, and macOS asks again after every rebuild. If a permission gets
+stuck, `tccutil reset All local.portionrecord` clears it.
+
 ## How it works
 
 PortionRecord streams the selected display rectangle
@@ -78,6 +83,10 @@ region sat still before you hit stop, the video would end early, and
 ffmpeg-based players and transcoders would drop the rest. To prevent that, a
 2×2 pt, 2%-opaque window in the region's corner changes color at stop time,
 forcing one final frame.
+
+The selection is snapped to the display's pixel grid before recording. Drag
+selections have sub-point coordinates, and ScreenCaptureKit resamples every
+frame of a `sourceRect` that isn't pixel-aligned, which softens text.
 
 Source layout:
 

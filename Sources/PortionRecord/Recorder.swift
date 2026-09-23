@@ -41,13 +41,14 @@ final class Recorder: NSObject, SCStreamDelegate, SCStreamOutput, SCRecordingOut
                 throw RecorderError.noDisplayForSelection
             }
             let displayBounds = CGDisplayBounds(display.displayID)
-            let rectInDisplay = region
-                .intersection(displayBounds)
-                .offsetBy(dx: -displayBounds.origin.x, dy: -displayBounds.origin.y)
-
             let filter = Self.filter(for: display, in: content, keeping: nudge)
-            let size = Self.outputSize(for: rectInDisplay.size,
-                                       scale: CGFloat(filter.pointPixelScale))
+            let scale = CGFloat(filter.pointPixelScale)
+            let rectInDisplay = Coordinates.pixelAligned(
+                region
+                    .intersection(displayBounds)
+                    .offsetBy(dx: -displayBounds.origin.x, dy: -displayBounds.origin.y),
+                scale: scale)
+            let size = Self.outputSize(for: rectInDisplay.size, scale: scale)
 
             let config = SCStreamConfiguration()
             config.sourceRect = rectInDisplay
