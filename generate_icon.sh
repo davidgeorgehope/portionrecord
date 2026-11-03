@@ -41,7 +41,8 @@ prompt = (
     "photoreal clutter. Designed so macOS can apply its own rounded-rect mask."
 )
 body = {
-    "model": "grok-imagine-image-quality",
+    "model": "grok-imagine-image-2.0",
+    "quality": "low",
     "prompt": prompt,
     "n": 1,
     "aspect_ratio": "1:1",
